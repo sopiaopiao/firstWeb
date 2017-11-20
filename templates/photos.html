@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+<head>
+<script src="../static/jquery-ui-1.12.1.custom/jquery.js"></script>
+
+</head>
+<style>
+</style>
+<body style="background-color: #D3F8F1">
+
+<title>Upload</title>
+
+<form action="/uploadpic" method=post enctype=multipart/form-data>
+    <input type=file name=file value="选择图片" >
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-lg-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="blankRadio" id="checkbox1" value="HeartStone" aria-label="...">HeartStone
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-lg-9 col-md-3">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="blankRadio" id="checkbox2" value="LOL" aria-label="...">LOL
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="blankRadio" id="checkbox3" value="YYS" aria-label="...">YYS
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="blankRadio" id="checkbox4" value="WOW" aria-label="...">WOW
+                    </label>
+                </div>
+            </div>
+        </div>
+    <input type=submit value="上传图片">
+</form>
+<br>
+
+<!--<form action="/travel" method=post album=document.getElementById("myalbum").value enctype=multipart/form-data> -->
+<form action="/travel" method=post>
+    <input type=submit value="SHOW PIC">
+    <select class="form-control fselect" id="myalbum" name='showpic'>
+        <option>HeartStone</option>
+        <option>LOL</option>
+        <option>YYS</option>
+        <option>WOW</option>
+    </select>
+</form>
+
+
+<!--</form>-->
+
+<br>
+<br>
+<br>
+
+{% for img in imgList %}
+<img src={{img}} height="200" width="200">
+{% endfor %}
+<script>
+$(document).ready(function () {
+              setInterval(function(){
+              var chkbox1 = document.getElementById('checkbox1');
+              var chkbox2 = document.getElementById('checkbox2');
+              var chkbox3 = document.getElementById('checkbox3');
+              var chkbox4 = document.getElementById('checkbox4');
+              if(chkbox1.checked){console.log('you choose hs!!')}
+              if(chkbox2.checked){console.log('you choose lpl!!')}
+              if(chkbox3.checked){console.log('you choose yys!!')}
+              if(chkbox4.checked){console.log('you choose wow!!')}
+            },1000)
+                             })
+</script>
+</body>
+
+</html>

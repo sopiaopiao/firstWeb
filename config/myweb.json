@@ -1,0 +1,9 @@
+{
+	"root_url":"/ob",
+	"puship":"192.168.194.132:51005",
+	"psweb":"192.168.194.132:51007",
+	"db_address":"127.0.0.1",
+	"db_port":"27017",
+	"secret_key":"55eae02566fdd7adb43",
+	"mongodb_name" : "myweb"
+}

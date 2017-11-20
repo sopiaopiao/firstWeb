@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>demo</title>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/js/getdata.js"></script>
+<script src="../static/js/geths.js"></script>
+<script src="../static/highcharts.js"></script>
+<link rel="stylesheet" href="../static/css/font-awesome.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../static/css/AdminLTE.min.css">
+<link rel="stylesheet" href="../static/css/skin-blue.min.css">
+<link rel="stylesheet" href="../static/css/romulan.css">
+</head>
+<body>
+<div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+<form>
+<input type="button" class='btn btn-success' onclick='gethsdata()' value="图表">
+<input type="button" class='btn btn-success' onclick='gethsdataTable()' value="新增">
+<input type="button" class='btn btn-success' onclick='gethsdata()' value="修改">
+<input type="button" class='btn btn-success' onclick='gethsdata()' value="删除">
+</form>
+<table id="example" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>我的职业</th>
+                                <th>对手职业</th>
+                                <th>我的套牌</th>
+                                <th>对手套牌</th>
+                                <th>胜负</th>
+                            </tr>
+                            {% for data in orgs: %}
+                                <tr>
+                                    <th>{{data['myname']}}</th>
+                                    <th>{{data['hisname']}}</th>
+                                    <th>{{data['mycard']}}</th>
+                                    <th>{{data['hiscard']}}</th>
+                                    <th>{{data['win']}}</th>
+                                </tr>
+                            {% endfor %}
+                   
+                            
+                        </thead>
+                    </table>
+<div id="container1" style="width: 550px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>
+

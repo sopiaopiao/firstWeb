@@ -1,0 +1,193 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>demo</title>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/js/getdata.js"></script>
+<script src="../static/js/geths.js"></script>
+<script src="../static/highcharts.js"></script>
+<link rel="stylesheet" href="../static/css/font-awesome.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../static/css/AdminLTE.min.css">
+<link rel="stylesheet" href="../static/css/skin-blue.min.css">
+<link rel="stylesheet" href="../static/css/romulan.css">
+<link rel="stylesheet" type="text/css" href="../static/css/NAV.css"/>
+<style>
+.table {width:650px;margin:0 auto;border:1px solid #ccc;background:#E2BEEB;}
+.table thead tr {background:#7C2C90;}
+.table thead tr th {text-align:center;padding:10px;}
+.table tbody tr td {text-align:center;padding:10px;}
+.table tbody tr td button {background:#519af2;border-radius:10px;border:none;color:#fff;width:80px}
+.table tbody tr th {text-align:center;padding:10px;}
+#container {background:#E2BEEB;}
+</style>
+</head>
+<body style="background-color: #D3F8F1">
+<nav class="top-right">
+	<a class="disc l1" href="#"><div>Monitor</div></a>
+	<a class="disc l2" href="travel"><div>Photos</div></a>
+  <a class="disc l3"><div>Finance</div></a>
+	<a class="disc l4" href="gameinfo"><div>Game</div></a>
+	<a class="disc l5 toggle">Menu</a>
+</nav>
+<div id="container" style="width: 650px; margin: 50 auto"></div>
+<script language="JavaScript">
+$(document).ready(function() {
+   var chart = {
+      type: 'spline',
+      backgroundColor: '#E2BEEB',
+	  animation: Highcharts.svg, // don't animate in IE < IE 10.
+      marginRight: 10,
+	  events: {
+         load: function () {
+            // set up the updating of the chart each second
+            var series = this.series[0];
+            setInterval(function () {
+               $.get('/appsoft',function(data){
+               $("#ob").text(data['ob_status']);
+               var x = (new Date()).getTime(), // current time
+               y = parseFloat(data['mem'])
+               series.addPoint([x, y], true, true);
+               })
+            }, 1000);
+         }
+      }
+   };
+   var title = {
+      text: '系统内存空闲率监控'
+   };
+   var xAxis = {
+      type: 'datetime',
+      tickPixelInterval: 150
+   };
+   var yAxis = {
+      title: {
+         text: 'Value'
+      },
+      plotLines: [{
+         value: 0,
+         width: 1,
+         color: '#808080'
+      }]
+   };
+   var tooltip = {
+      formatter: function () {
+      return '<b>' + this.series.name + '</b><br/>' +
+         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+         Highcharts.numberFormat(this.y, 2);
+      }
+   };
+   var plotOptions = {
+      area: {
+         pointStart: 1940,
+         marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius: 0,
+            states: {
+               hover: {
+                 enabled: true
+               }
+            }
+         }
+      }
+   };
+   var legend = {
+      enabled: true
+   };
+   var exporting = {
+      enabled: false
+   };
+   var series= [{
+      name: 'mem data',
+      data: (function () {
+         // generate an array of random data
+         var data = [],time = (new Date()).getTime(),i;
+         for (i = -19; i <= 0; i += 1) {
+            data.push({
+               x: time + i * 1000,
+               y: Math.random()
+            });
+         }
+         return data;
+      }())
+   },
+   ];
+
+   var json = {};
+   json.chart = chart;
+   json.title = title;
+   json.tooltip = tooltip;
+   json.xAxis = xAxis;
+   json.yAxis = yAxis;
+   json.legend = legend;
+   json.exporting = exporting;
+   json.series = series;
+   json.plotOptions = plotOptions;
+
+
+   Highcharts.setOptions({
+      global: {
+         useUTC: false
+      }
+   });
+   $('#container').highcharts(json);
+
+});
+
+toggle = document.querySelectorAll(".toggle")[0];
+nav = document.querySelectorAll("nav")[0];
+toggle_open_text = 'Menu';
+toggle_close_text = 'Close';
+
+toggle.addEventListener('click', function() {
+	nav.classList.toggle('open');
+
+  if (nav.classList.contains('open')) {
+    toggle.innerHTML = toggle_close_text;
+  } else {
+    toggle.innerHTML = toggle_open_text;
+  }
+}, false);
+
+</script>
+ <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th width="15%">序号</th>
+          <th width="25%">程序</th>
+          <th width="35%">状态</th>
+          <th width="25%">备注</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>appName1</td>
+          <td id='ob'>Running</td>
+          <td><button type="button">详情</button></td>
+
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>appName2</td>
+          <td>Running</td>
+          <td><button type="button" class="button black bigrounded">详情</button></td>
+
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>appName3</td>
+          <td>Running</td>
+          <td><button type="button" class="button black bigrounded">详情</button></td>
+
+        </tr>
+      </tbody>
+    </table>
+
+<dialog open hidden="hidden" id='dialogtest'>这是打开的对话窗口</dialog>
+
+</body>
+</html>

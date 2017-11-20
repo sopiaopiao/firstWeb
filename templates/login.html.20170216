@@ -1,0 +1,22 @@
+<html>
+
+<head>
+<title>登陆</title>
+</head>
+
+<body style="background-image:url(../static/backgrnd.jpg);color: black; font-family: Georgia; line-height: 1.5; margin: 0.5em 1em;">
+<h1>登陆</h1>
+
+<form action="/login" method="post">
+<input type="text" id="username" name="username" placeholder="用户名">
+<input type="password" id="password" name="password" placeholder="密   码">
+<button type="submit">登  录</button>
+</form>
+
+<div>
+<a href="register">注册</a>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+<select>
+{% for data in orgs: %}
+<option value="{{data['id']}}">{{data['myname']}},{{data['hisname']}},{{data['mycard']}},{{data['hiscard']}},{{data['win']}}</option>
+{% endfor %}
+</select>

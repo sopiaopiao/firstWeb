@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            /* css 代码  */
+        </style>
+        <script src="../static/js/jquery-1.8.3.min.js"></script>
+        <script src="../static/js/highmaps.js"></script>
+        <script src="../static/js/drilldown.js"></script>
+        <script src="../static/js/exporting.js"></script>
+    </head>
+    <body>
+        <div id="container" style="height:600px;"></div>
+        <div >
+            <label>
+                <!-- <h2>逾期率<h2> -->
+                <h2><span id="cityname"></span><h2>
+                <h2><span id="value"></span><h2>
+            </label>
+        </div>
+
+        <script>
+        var allcitydict = {'达州市':'DZ','成都市':'CD',"甘孜藏族自治州":'GZ','阿坝藏族羌族自治州':'AB','凉山彝族自治州':'LSZ','绵阳市':'MY','广元市':'GY','雅安市':'YA','宜宾市':'YB','乐山市':'LS','南充市':'NC','巴中市':'BZ','泸州市':'LZ','资阳市':'ZY','攀枝花市':'PZH','眉山市':'MS','广安市':'GA','德阳市':'DY','内江市':'NJ','遂宁市':'SN','自贡市':'ZG'}
+        var allcitdict2 = {'DZ':'达州市','CD':'成都市','GZ':"甘孜藏族自治州",'AB':'阿坝藏族羌族自治州','LSZ':'凉山彝族自治州','MY':'绵阳市','GY':'广元市','YA':'雅安市','YB':'宜宾市','LS':'乐山市','NC':'南充市','BZ':'巴中市','LZ':'泸州市','ZY':'资阳市','PZH':'攀枝花市','MS':'眉山市','GA':'广安市','DY':'德阳市','NJ':'内江市','SN':'遂宁市','ZG':'自贡市'}
+        function tooltipdata(code){
+          console.log(code)
+          return allcitdict2[code]
+        }
+
+
+        function showitem(list){
+          for(var i = 0 ;i<list.length;i++){
+             console.log(list[i])
+          }
+        }
+        function getcityvalue(list,city){
+          for(var i = 0 ;i<list.length;i++){
+            if(list[i] == city){return list[i+1]}
+          }
+        }
+
+        function getdata(list){
+          for(var i = 0; i<list.length ;i++){
+            var enName = {'name':allcitydict[list[i]['name']]}
+            console.log(enName)
+            console.log(list[i]['value'])
+            $.get('/city_level_1',enName,function(data){
+
+              console.log(data['delaycount'])
+            })
+
+          }
+        }
+
+
+     function updatedata(newdata){
+       console.log(newdata.length)
+     }
+     var myname = [];
+     function useajax(list){
+       for(var i = 0; i<list.length ;i++){
+         var enName = {'name':allcitydict[list[i]['name']]}
+         $.ajax({
+           async: false,
+           url: '/city_level_1',
+           data: enName,
+             success: function(data){tmpname = data['name'];tmpvalue = parseInt(data['delaycount']);
+             var tmpdict = {name:data['name'],value:parseInt(data['delaycount'])}
+                                                  // console.log(tmpdict);
+
+                                                  myname.push(tmpdict)}});
+          }
+          }
+
+        var num = 0;
+        function getcitylevel1(enName){
+            $.get('/city_level_1',enName,function(data){
+              return data['totcount']
+            })
+
+        }
+
+            Highcharts.setOptions({
+    lang: {
+        drillUpText: '< 返回 “{series.name}”'
+    }
+});
+
+    // geochina = 'https://data.jianshukeji.com/jsonp?filename=geochina/';
+    // geochina + 'china.json&callback=?'
+
+$.getJSON('../static/js/sichuan.json', function(mapdata) {
+    var data = [];
+    // 随机数据
+    Highcharts.each(mapdata.features, function(md, index) {
+        enName = md.properties.enName
+        getDict = {'name':enName}
+        name: md.properties.name
+        // $.get('/city_level_1',getDict,function(res){
+        // console.log(enName)
+        // console.log(typeof(mongodata))
+
+        // console.log(getcityvalue(mongodata,enName))
+        // console.log(mongodata[enName])
+        var tmp = {
+            name: md.properties.name,
+            value: Math.floor((Math.random() * 100) + 1)
+            // value: res['delaycount']
+        };
+        if(md.properties.drilldown) {
+            tmp.drilldown = md.properties.drilldown;
+        }
+        data.push(tmp);
+        // })
+    });
+    useajax(data)
+    data = myname
+
+    map = new Highcharts.Map('container', {
+        chart: {
+            events: {
+                drilldown: function(e) {
+                    console.log(e);
+                    // 异步下钻
+                    if (e.point.drilldown) {
+                        var pointName = e.point.properties.fullname;
+                        map.showLoading('下钻中，请稍后...');
+                        // 获取二级行政地区数据并更新图表
+                        $.getJSON(geochina +   e.point.drilldown + '.json&callback=?', function(data) {
+                            data = Highcharts.geojson(data);
+                            Highcharts.each(data, function(d) {
+                                d.value = Math.floor((Math.random() * 100) + 1); // 生成 1 ~ 100 随机值
+                            });
+                            map.hideLoading();//隐藏加载中图标
+                            map.addSeriesAsDrilldown(e.point, {
+                                name: e.point.name,
+                                data: data,
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '{point.name}'
+                                }
+                            });
+                            map.setTitle({
+                                text: pointName
+                            });
+                        });
+                    }
+                },
+                drillup: function() {
+                    map.setTitle({
+                        text: '四川'
+                    });
+                }
+            }
+        },
+        title: {
+            text: '四川省地图'
+        },
+        subtitle: {
+            text: '<a href="https://www.hcharts.cn/mapdata">点击查看地图数据及详情</a>'
+        },
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+        tooltip: {
+            useHTML: true,
+            headerFormat: '<table><tr><td>{point.name}</td></tr>',
+            pointFormat: '<tr><td>全称</td><td>{point.properties.name}</td></tr>' +
+            '<tr><td>区号</td><td>{point.properties.quhao}</td></tr>' +
+            '<tr><td>缩写</td><td>{point.properties.enName}</td></tr>',
+            footerFormat: '</table>'
+        },
+        colorAxis: {
+            min: 0,
+            minColor: '#fff',
+            maxColor: '#006cee',
+            labels:{
+                style:{
+                    "color":"red","fontWeight":"bold"
+                }
+            }
+        },
+        series: [{
+            data: data,
+            mapData: mapdata,
+            joinBy: 'name',
+            name: '四川省地图',
+            states: {
+                hover: {
+                    color: '#a4edba'
+                }
+            }
+        }]
+    });
+});
+
+        </script>
+    </body>
+</html>

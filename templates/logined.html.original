@@ -1,0 +1,72 @@
+<html>
+<head>
+<link href="../static/jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet">
+<script src="../static/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script src="../static/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<title>Welcome!</title>
+<style>
+h1
+{
+	color:orange;
+	text-align:center;
+}
+body
+{
+        background-color:#d0e4fe;
+}
+.container
+{
+	text-align:center;
+}
+.center_div
+{
+	margin-left:auto;  
+	margin-right:auto;
+	width:90%;
+	text-align:center;
+	padding:8px;
+}
+</style>
+</head>
+
+<script>
+  $(function() {
+    $( "#date" ).datepicker();
+  });
+  $(function() {
+    $( "#draggable" ).draggable();
+  });
+  $(function() {
+    $( "#resizable" ).resizable();
+  });
+  
+</script>
+
+<body>
+
+<div>
+<nav>
+        <a href='#'>AboutMe</a>
+        <a href="logout">LogOut</a>
+        <a href="#">WOW</a>
+        <a href="#">HeartStone</a>
+</nav>
+</div>
+<div class="center_div">
+<h1>OK..... You are login in!!!</h1>
+</div>
+
+<div>
+<p>DATE: <input type="text" name="date" id="date"/></p>
+</div>
+
+
+<div class="center_div" id="draggable">
+<img src="../static/anduyin.png">
+</div>
+
+
+
+
+</body>
+</html>

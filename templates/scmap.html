@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1"/>
+    <title>china</title>
+    <script type="text/javascript" src="../static/js/d3.min.js"></script>
+
+    <style>
+        path {
+            fill: #ccc;
+            stroke: #fff;
+            stroke-width: .5px;
+        }
+
+        path:hover {
+            fill: red;
+        }
+    </style>
+</head>
+
+<body  style="background-color: #D3F8F1">
+
+<div >
+    <label>
+        <h2>当前地市：<span id="tooltip"></span><h2>
+    </label>
+</div>
+<script type="text/javascript">
+    // var width = 960, height = 800;
+    var width = 1400, height = 580;//表示设定外框架的大小
+
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("preserveAspectRatio", "xMidYMid")
+            .attr("viewBox", "0 0 " + width + " " + height);
+
+    var tooltip = d3.select("#tooltip");
+
+    var proj = d3.geo.mercator().center([102, 30.5]).scale(3000).translate([width / 2, height / 2]);  //设定地图在外框中的位置
+    var path = d3.geo.path().projection(proj);
+
+    d3.json("../static/js/sichuan.json", function (error, cn) {
+        svg.append("g")
+                .attr("class", "states")
+                .selectAll("path")
+                .data(cn.features)
+                .enter()
+                .append("path")
+				.attr("d", path)
+                .on("mouseover", function (d) {
+                    tooltip.style("display", null);
+                    // name @ d.properties.name
+                    showText(d.properties.name)
+                    showData(d.properties.name)
+
+                })
+                .on("mouseout", function () {
+                    tooltip.style("display", "none");
+                });
+          svg.selectAll("text")
+		     .data(cn.features)
+			 .enter()
+			 .append("text")
+			 .attr("transform",function(d,i)
+			 {
+			   return "translate("+(path.centroid(d)[0]-10)+","+ path.centroid(d)[1]+")";
+			 })
+			 .text(function(d)
+              {
+                return d.properties.name;
+              })
+			 .attr("font-size",10)
+			 .attr("fill","#000000");
+
+    });
+
+    //处理要显示的文字
+    function showText(_id) {
+        tooltip.text(_id)
+    }
+
+
+
+
+function showText(_id) {
+
+    tooltip.text(_id);
+console.log(_id);
+}
+</script>
+
+</body>
+
+</html>
